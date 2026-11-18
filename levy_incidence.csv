@@ -1,0 +1,5 @@
+levy_rate,pass_through,new_price,members_lost_m,levy_raised_m,borne_by_members_m,borne_by_service_m,excess_burden_m,excess_burden_per_pound_raised,profit_maximising
+0.05,0.0,10.0,0.0,60.0,0.0,60.0,-0.0,-0.0,False
+0.05,0.088,10.044,0.053,59.946,5.248,59.974,5.276,0.088,True
+0.05,0.5,10.25,0.3,59.655,29.55,60.555,30.45,0.51,False
+0.05,1.0,10.5,0.6,59.22,58.2,62.82,61.8,1.044,False

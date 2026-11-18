@@ -1,0 +1,25 @@
+cost_category,ioat_code,spend_type,core,vfx,note
+Development and rights,R90,procurement,N,N,Writers' and rights fees before pre-production; outside core expenditure
+Producers and director,J59 & J60,in_house_pay,Y,N,Engaged by the production company
+Cast,J59 & J60,in_house_pay,Y,N,Engaged by the production company
+Crew,J59 & J60,in_house_pay,Y,N,Engaged by the production company
+Crew supplied by agencies,N78,procurement,Y,N,
+Studio and stage hire,L68BXL683,procurement,Y,N,Renting and operating of real estate
+Camera lighting and grip hire,N77,procurement,Y,N,
+Set construction,"F41, F42  & F43",procurement,Y,N,
+Props and art department materials,C32,procurement,Y,N,
+Costume,C14,procurement,Y,N,
+Location fees,L68BXL683,procurement,Y,N,
+Accommodation,I55,procurement,Y,N,
+Catering,I56,procurement,Y,N,
+Ground transport,H493T495,procurement,Y,N,
+Air travel,H51,procurement,Y,N,
+Security,N80,procurement,Y,N,
+Production office and IT,J61,procurement,Y,N,
+Post-production,J59 & J60,procurement,Y,N,Editing; sound; grading
+Visual effects,J59 & J60,procurement,Y,Y,
+Animation services,J59 & J60,procurement,Y,N,
+Music,J59 & J60,procurement,Y,N,Includes sound recording and music publishing
+Insurance,K65.1-2 & K65.3,procurement,N,N,
+Legal and accounting,M691,procurement,N,N,
+Financing and completion bond,K66,procurement,N,N,

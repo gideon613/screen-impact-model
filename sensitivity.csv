@@ -1,0 +1,6 @@
+setting,low,high,low_case,high_case,range
+Induced effects,1.155,1.496,excluded (Type I),included,0.341
+Import leakage,1.467,1.63,import shares +25%,no import adjustment,0.163
+Corporation tax,1.347,1.496,excluded,included,0.149
+Tax on labour,1.435,1.496,"2024 tax wedge, 29.4%","2023, 31.2%",0.061
+Household closure,1.469,1.513,saving ratio 10.1% (2024),tax wedge 29.4% (2024),0.044

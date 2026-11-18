@@ -1,0 +1,12 @@
+a10_group,domestic_output_bp,imports_goods_eu,imports_goods_row,imports_services,trade_margins,product_taxes,total_supply_pp
+Agriculture [A],43004,8727,7918,1026,13330,1363,75368
+Production [B-E],977343,314683,276420,31324,395979,120756,2116505
+Construction [F],398793,0,0,3321,0,35158,437272
+"Distribution, transport, hotels and restaurants [G-I]",838342,0,0,63419,-428916,25670,498515
+Information and communication [J],292315,943,969,33739,19607,16887,364460
+Financial and insurance [K],354947,0,0,33643,0,12772,401362
+Real estate [L],434043,0,0,7509,0,2031,443583
+Professional and support activities [M-N],645258,5,3,107381,0,21073,773720
+"Government, health & education [O-Q]",724161,0,0,4898,0,5521,734580
+Other services [R-T],111600,776,1143,12572,0,13543,139634
+Total (ONS),4819806,325134,286453,298832,0,254774,5984999

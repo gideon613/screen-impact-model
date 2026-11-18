@@ -1,0 +1,82 @@
+# Illustrative only. Four hypothetical productions laid out like the top sheet of a production cost report,
+# in £m. Titles, budgets, cost splits and locations are invented to demonstrate the method and do not
+# describe any real production, studio or company. location is the UK nation or region where the cost
+# was incurred, or Outside UK. format is one of film, hetv, animation, childrens, unscripted.
+production_id,production,format,cost_category,location,gbp_m
+P1,Drama series (8 x 60 min),hetv,Development and rights,London,2.0
+P1,Drama series (8 x 60 min),hetv,Producers and director,London,4.0
+P1,Drama series (8 x 60 min),hetv,Cast,London,9.0
+P1,Drama series (8 x 60 min),hetv,Crew,South East,14.0
+P1,Drama series (8 x 60 min),hetv,Crew supplied by agencies,South East,1.5
+P1,Drama series (8 x 60 min),hetv,Studio and stage hire,South East,5.0
+P1,Drama series (8 x 60 min),hetv,Camera lighting and grip hire,South East,4.0
+P1,Drama series (8 x 60 min),hetv,Set construction,South East,5.0
+P1,Drama series (8 x 60 min),hetv,Props and art department materials,South East,1.5
+P1,Drama series (8 x 60 min),hetv,Costume,London,1.5
+P1,Drama series (8 x 60 min),hetv,Location fees,Wales,1.0
+P1,Drama series (8 x 60 min),hetv,Accommodation,Wales,2.0
+P1,Drama series (8 x 60 min),hetv,Catering,Wales,1.5
+P1,Drama series (8 x 60 min),hetv,Ground transport,Wales,1.5
+P1,Drama series (8 x 60 min),hetv,Air travel,London,0.5
+P1,Drama series (8 x 60 min),hetv,Security,Wales,0.5
+P1,Drama series (8 x 60 min),hetv,Production office and IT,London,0.5
+P1,Drama series (8 x 60 min),hetv,Post-production,London,3.0
+P1,Drama series (8 x 60 min),hetv,Visual effects,London,3.0
+P1,Drama series (8 x 60 min),hetv,Visual effects,Outside UK,1.0
+P1,Drama series (8 x 60 min),hetv,Music,London,0.5
+P1,Drama series (8 x 60 min),hetv,Insurance,London,1.0
+P1,Drama series (8 x 60 min),hetv,Legal and accounting,London,0.8
+P1,Drama series (8 x 60 min),hetv,Financing and completion bond,London,0.7
+P2,Feature film,film,Development and rights,London,3.0
+P2,Feature film,film,Producers and director,London,5.0
+P2,Feature film,film,Cast,London,10.0
+P2,Feature film,film,Crew,South East,8.0
+P2,Feature film,film,Crew,Outside UK,2.0
+P2,Feature film,film,Studio and stage hire,South East,4.0
+P2,Feature film,film,Camera lighting and grip hire,South East,2.5
+P2,Feature film,film,Set construction,South East,3.0
+P2,Feature film,film,Props and art department materials,South East,1.0
+P2,Feature film,film,Costume,South East,1.0
+P2,Feature film,film,Location fees,Outside UK,1.0
+P2,Feature film,film,Accommodation,South East,1.0
+P2,Feature film,film,Accommodation,Outside UK,1.5
+P2,Feature film,film,Catering,South East,1.0
+P2,Feature film,film,Catering,Outside UK,0.5
+P2,Feature film,film,Ground transport,South East,1.0
+P2,Feature film,film,Air travel,London,1.0
+P2,Feature film,film,Security,South East,0.5
+P2,Feature film,film,Production office and IT,London,0.5
+P2,Feature film,film,Post-production,London,2.5
+P2,Feature film,film,Visual effects,London,8.0
+P2,Feature film,film,Visual effects,Outside UK,2.0
+P2,Feature film,film,Music,London,1.0
+P2,Feature film,film,Insurance,London,1.0
+P2,Feature film,film,Legal and accounting,London,0.8
+P2,Feature film,film,Financing and completion bond,London,0.7
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Development and rights,London,0.5
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Producers and director,Scotland,1.2
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Cast,Scotland,0.8
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Crew,Scotland,2.5
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Crew supplied by agencies,Scotland,0.5
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Studio and stage hire,Scotland,0.8
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Camera lighting and grip hire,Scotland,0.7
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Set construction,Scotland,0.4
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Accommodation,Scotland,0.4
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Catering,Scotland,0.3
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Ground transport,Scotland,0.3
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Post-production,Scotland,0.9
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Music,London,0.1
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Insurance,London,0.2
+P3,Unscripted entertainment series (10 x 60 min),unscripted,Legal and accounting,London,0.2
+P4,Animated series (52 x 11 min),animation,Development and rights,London,0.8
+P4,Animated series (52 x 11 min),animation,Producers and director,North West,1.2
+P4,Animated series (52 x 11 min),animation,Cast,London,0.6
+P4,Animated series (52 x 11 min),animation,Crew,North West,3.0
+P4,Animated series (52 x 11 min),animation,Animation services,Northern Ireland,5.0
+P4,Animated series (52 x 11 min),animation,Animation services,Outside UK,1.5
+P4,Animated series (52 x 11 min),animation,Post-production,North West,0.8
+P4,Animated series (52 x 11 min),animation,Music,London,0.4
+P4,Animated series (52 x 11 min),animation,Production office and IT,North West,0.5
+P4,Animated series (52 x 11 min),animation,Studio and stage hire,North West,0.3
+P4,Animated series (52 x 11 min),animation,Insurance,London,0.1
+P4,Animated series (52 x 11 min),animation,Legal and accounting,London,0.3

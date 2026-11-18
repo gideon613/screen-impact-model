@@ -1,0 +1,13 @@
+{
+  "_note": "Illustrative only. A hypothetical subscription service. A streaming service holds these figures internally: members and revenue from its own accounts, and the elasticity from the response of sign-ups and cancellations to past price changes. marginal_cost_share null sets marginal cost from the pricing condition (1 - 1/elasticity).",
+  "members_m": 10.0,
+  "monthly_price": 10.0,
+  "elasticity": 1.2,
+  "marginal_cost_share": null,
+  "levy_rate": 0.05,
+  "pass_through_cases": [
+    0.0,
+    0.5,
+    1.0
+  ]
+}

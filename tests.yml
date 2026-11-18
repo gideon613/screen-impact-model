@@ -1,0 +1,20 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Reproduce the ONS published results
+        run: python io_footprint.py validate
+      - name: Run the test suite (engine, credit, slate, levy and the app)
+        run: python -m pytest -q

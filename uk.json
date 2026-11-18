@@ -1,0 +1,61 @@
+{
+  "market": "United Kingdom",
+  "currency": "GBP",
+  "io_year": 2023,
+  "production_formats": [
+    "film",
+    "hetv",
+    "animation",
+    "childrens",
+    "unscripted"
+  ],
+  "purchaser_industry": "J59 & J60",
+  "household_closure": {
+    "tax_wedge": 0.312,
+    "saving_ratio": 0.062,
+    "sources": [
+      "OECD (2025), Taxing Wages 2025, country note: United Kingdom. Tax wedge for the average single worker, 2023.",
+      "ONS (2025), The Blue Book 2025, National accounts at a glance. Household saving ratio, 2023."
+    ]
+  },
+  "exchequer": {
+    "labour_tax_rate_on_compensation": 0.312,
+    "corporation_tax_receipts_gbp_m": 89600,
+    "corporation_tax_main_rate": 0.25,
+    "sources": [
+      "OECD (2025), Taxing Wages 2025: income tax plus employee and employer social security contributions as a share of labour costs, average single worker, 2023.",
+      "HMRC (2024), Annual Report and Accounts 2023 to 2024, Trust Statement note 2.3: Corporation Tax revenue £89.6 billion.",
+      "Corporation Tax main rate 25% from 1 April 2023 (Finance Act 2021).",
+      "Product taxes on household spending, taxes on production and the film and TV industry's non-deductible product taxes on its purchases are taken from the ONS IOAT 2023."
+    ]
+  },
+  "screen_incentive": {
+    "name": "Audio-Visual Expenditure Credit (AVEC)",
+    "credit_rate_by_format": {
+      "film": 0.34,
+      "hetv": 0.34,
+      "animation": 0.39,
+      "childrens": 0.39
+    },
+    "vfx_credit_rate": 0.39,
+    "vfx_formats": [
+      "film",
+      "hetv"
+    ],
+    "cap_share_of_core_expenditure": 0.8,
+    "vfx_exempt_from_cap": true,
+    "credit_is_taxable_at": 0.25,
+    "eligible_formats": [
+      "film",
+      "hetv",
+      "animation",
+      "childrens"
+    ],
+    "sources": [
+      "BFI, About UK creative industry expenditure credits: 34% taxable credit for film and high-end TV; 39% for animation and children's TV.",
+      "HM Treasury and HMRC policy paper (2024), Corporation Tax: additional tax credit for visual effects expenditure: 39% on UK VFX costs, exempt from the 80% cap, for costs incurred from 1 January 2025.",
+      "HMRC, Creative Industries Expenditure Credit Manual, CREC061410: VFX relief and the 80% cap.",
+      "High-end TV relief covers drama, comedy and documentary; unscripted entertainment formats are not eligible."
+    ]
+  }
+}

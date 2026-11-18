@@ -1,0 +1,6 @@
+production,format,budget,uk_spend,gva_direct,gva_indirect,gva_induced,gva_total,wages,operating_surplus,taxes_on_production,fte_direct,fte_total,direct_fte_source,avec_eligible,uk_core_expenditure,qualifying_within_cap,uk_vfx,gross_credit,net_cost_of_relief,gross_receipts,gross_receipts_per_1_relief,break_even_additionality,gross_gva_per_1_relief
+Drama series (8 x 60 min),hetv,65.0,64.0,27.0,26.458,18.101,71.559,49.81,21.524,0.225,410.0,992.047,reported,True,59.5,48.4,3.0,17.626,13.22,21.904,1.657,0.604,5.413
+Feature film,film,63.5,56.5,23.0,22.211,15.312,60.523,42.135,18.35,0.038,330.0,812.28,reported,True,51.0,46.4,8.0,17.74,13.305,18.507,1.391,0.719,4.549
+Unscripted entertainment series (10 x 60 min),unscripted,9.8,9.8,4.5,3.945,2.937,11.381,8.081,3.259,0.041,95.0,187.177,reported,False,8.9,0.0,0.0,0.0,0.0,3.526,,,
+Animated series (52 x 11 min),animation,14.5,13.0,4.8,4.748,3.261,12.809,8.972,3.922,-0.086,108.0,207.003,reported,True,11.8,10.64,0.0,4.15,3.112,3.925,1.261,0.793,4.116
+Slate total,all,152.8,143.3,59.3,57.362,39.611,156.273,108.999,47.056,0.218,943.0,2198.508,reported,3,131.2,105.44,11.0,39.516,29.637,47.862,1.496,0.668,4.889

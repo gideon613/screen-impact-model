@@ -1,0 +1,18 @@
+check,value,status
+Total output equals Blue Book 2025 (£m),0.0,PASS
+Total GVA equals Blue Book 2025 (£m),0.0,PASS
+Total compensation equals Blue Book 2025 (£m),0.0,PASS
+"Row total use equals column output, max abs gap (£m)",0.0,PASS
+"GVA equals compensation plus operating surplus plus production taxes, max abs gap (£m)",0.0,PASS
+"Inputs at purchasers' prices plus GVA equal output, max abs gap (£m)",0.0,PASS
+"L1 against ONS Leontief inverse, max abs element difference",5.773159728050814e-15,PASS
+"Type I output multipliers against ONS, max abs difference",6.217248937900877e-15,PASS
+"Type I GVA effects against ONS, max abs difference",1.3322676295501878e-15,PASS
+"Type I compensation effects against ONS, max abs difference",7.771561172376096e-16,PASS
+"Type I FTE effects against ONS, max abs difference",6.251074724517025e-08,PASS
+"Leontief identity: (I - A) L1 p = p, max abs (£m)",1.0658141036401503e-14,PASS
+"Type II identity: x - A x - c h = p, max abs (£m)",1.9539925233402755e-14,PASS
+"Induced output: L2 route equals closed form, max abs (£m)",1.7763568394002505e-14,PASS
+Mode 1: £1 of J59 & J60 final demand reproduces ONS Type I GVA effect,5.551115123125783e-16,PASS
+Price bridge conserves spend (£m),5.684341886080802e-14,PASS
+Implied whole-economy FTE from ONS coefficients,30653053.15182118,info

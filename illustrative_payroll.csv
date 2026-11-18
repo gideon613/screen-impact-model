@@ -1,0 +1,11 @@
+# Illustrative only. Direct UK jobs on each hypothetical production as payroll would report them, in
+# full-time equivalents (days worked divided by a full-time year), by the UK nation or region where the
+# work took place. Where a production appears here, these jobs replace the modelled direct jobs.
+production_id,location,direct_fte
+P1,South East,320
+P1,London,90
+P2,South East,190
+P2,London,140
+P3,Scotland,95
+P4,North West,100
+P4,London,8
