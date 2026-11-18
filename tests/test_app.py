@@ -21,8 +21,10 @@ def app():
 
 
 def test_headline_figures_match_the_engine(app):
-    assert [t.label for t in app.tabs] == ["Economic contribution", "Tax credit", "Subscriptions and levies",
-                                           "How it works"]
+    assert [t.label for t in app.tabs] == ["Economic contribution", "Tax credit", "Response to price",
+                                           "Subscriptions and levies", "How it works"]
+    assert _metric(app, "Members lost per 1% rise") == "1.16%"
+    assert _metric(app, "Value to members") == "£518m"
     assert _metric(app, "UK spend") == "£143.3m"
     assert _metric(app, "UK GDP supported") == "£156.3m"
     assert _metric(app, "Tax paid per £1 the credit costs") == "£1.50"

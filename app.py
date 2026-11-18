@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from elasticity import PANEL, event_study
 from fiscal import break_even_additionality, load_config, net_fiscal_impact
 from io_footprint import load_data
 from slate import (OUTSIDE_UK, SLATE_COLUMNS, UK_LOCATIONS, default_settings, load_mapping, run_slate,
@@ -84,6 +85,16 @@ def example(name: str) -> pd.DataFrame:
 @st.cache_data
 def mapping() -> pd.DataFrame:
     return load_mapping()
+
+
+@st.cache_data
+def price_panel() -> pd.DataFrame:
+    return pd.read_csv(PANEL, comment="#")
+
+
+@st.cache_data(show_spinner="Estimating")
+def estimate_response(panel: pd.DataFrame):
+    return event_study(panel)
 
 
 def repo_url() -> str | None:
@@ -235,8 +246,8 @@ st.markdown(
 st.caption("Built by Gideon Morrison-Wood on the ONS input-output tables for 2023."
            + (f" [Source code and method]({url})" if url else ""))
 
-tab_econ, tab_fiscal, tab_subs, tab_method = st.tabs(
-    ["Economic contribution", "Tax credit", "Subscriptions and levies", "How it works"])
+tab_econ, tab_fiscal, tab_price, tab_subs, tab_method = st.tabs(
+    ["Economic contribution", "Tax credit", "Response to price", "Subscriptions and levies", "How it works"])
 
 # --------------------------------------------------------------------------------------
 # Scenario controls (top of the first tab, applied before the model runs)
@@ -541,6 +552,89 @@ with tab_fiscal:
                    "production is certified as British and claims in a single year. Tax uses average rates.")
 
 # --------------------------------------------------------------------------------------
+# Tab 3: response to price (econometrics)
+# --------------------------------------------------------------------------------------
+with tab_price:
+    headline_price = st.container()
+    st.markdown(
+        "A service that has raised prices in some markets and not others can measure how many members a price rise "
+        "costs. This view compares, month by month, markets that raised their price with markets that did not, "
+        "using membership data the service already holds. The estimate feeds the levy calculation in the next tab.")
+    c1, c2 = st.columns([1, 1])
+    panel_src = c1.radio("Membership data", ["Illustrative markets", "Upload membership data"], horizontal=True)
+    panel = price_panel()
+    if panel_src == "Upload membership data":
+        up_panel = c1.file_uploader("Monthly price and members by market (CSV)", type="csv")
+        if up_panel is not None:
+            panel = pd.read_csv(up_panel, comment="#")
+        else:
+            c1.info("Upload a file to replace the illustrative markets.")
+    c2.download_button("Download the membership data template", price_panel().to_csv(index=False),
+                       "membership_template.csv", "text/csv")
+    try:
+        est = estimate_response(panel)
+    except (ValueError, KeyError, np.linalg.LinAlgError) as err:
+        st.error(f"The estimate could not be made from this data.\n\n{err}")
+        est = None
+
+    if est is not None:
+        illustrative = panel_src == "Illustrative markets" or panel.equals(price_panel())
+        check = (f" The illustrative data were built with a true value of 1.2, which lies within the likely range."
+                 if illustrative and est.low <= 1.2 <= est.high else "")
+        with headline_price:
+            in_short(f"Comparing {est.n_rising} markets that raised their price with {est.n_comparison} that did not, "
+                     f"a 1% price rise loses about {est.long_run:.2f}% of members within a year (likely range "
+                     f"{est.low:.2f}% to {est.high:.2f}%). A simple before-and-after comparison suggests only "
+                     f"{est.before_after:.2f}%, because membership was growing in every market at the same time.{check}")
+        e1, e2, e3, e4 = st.columns(4)
+        e1.metric("Members lost per 1% rise", f"{est.long_run:.2f}%", border=True,
+                  help="Average response 9 to 12 months after the rise: the long-run price elasticity of membership.")
+        e2.metric("Likely range", f"{est.low:.2f}–{est.high:.2f}%", border=True,
+                  help="95% confidence interval, allowing for markets that appear in more than one comparison.")
+        e3.metric("Simple before-and-after", f"{est.before_after:.2f}%", border=True,
+                  help="Change in members in markets that raised prices, six months before against months 6 to 11 "
+                       "after, with no comparison group.")
+        e4.metric("Markets compared", f"{est.n_rising} and {est.n_comparison}", border=True,
+                  help="Markets that raised their price, and markets that never changed price in the data. Markets "
+                       "that raised prices later also act as comparisons until they do.")
+
+        st.subheader("Members lost per 1% price rise, by months since the rise")
+        path = est.path.rename(columns={"months_since_rise": "Months since the rise", "elasticity": "Members lost, %"})
+        band = alt.Chart(path).mark_area(color=C1, opacity=0.18).encode(
+            x=alt.X("Months since the rise:Q", axis=_axis("Months since the price rise",
+                                                         values=list(range(-6, 13)))),
+            y=alt.Y("low:Q", axis=_axis("Members lost per 1% price rise, %")), y2="high:Q")
+        line = alt.Chart(path).mark_line(color=C1, strokeWidth=2, point=alt.OverlayMarkDef(size=40, filled=True)
+                                         ).encode(
+            x="Months since the rise:Q", y="Members lost, %:Q",
+            tooltip=[alt.Tooltip("Months since the rise:Q"), alt.Tooltip("Members lost, %:Q", format=".2f"),
+                     alt.Tooltip("low:Q", title="Range from", format=".2f"),
+                     alt.Tooltip("high:Q", title="Range to", format=".2f")])
+        zero = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(color=INK, strokeWidth=1).encode(y="y:Q")
+        rise_rule = alt.Chart(pd.DataFrame({"x": [-0.5]})).mark_rule(color=MUTED, strokeDash=[2, 3]).encode(x="x:Q")
+        rise_lab = alt.Chart(pd.DataFrame({"x": [-0.5], "t": ["price rise"]})).mark_text(
+            align="left", dx=5, color=INK2, fontSize=11).encode(x="x:Q", y=alt.value(12), text="t:N")
+        st.altair_chart((band + zero + rise_rule + rise_lab + line).properties(height=300).configure_view(stroke=None),
+                        width="stretch")
+        st.caption("Before the rise the two groups move together, so the markets that did not raise prices are a fair "
+                   "guide to what would have happened without the rise. After it, members leave over the first few "
+                   "months as cancellations take effect. The shaded band is the likely range.")
+        with st.expander("Method"):
+            st.markdown(
+                "Each month in which a price rise took place is compared separately. The markets that raised prices "
+                "that month are set against markets that did not change price over the 6 months before and 12 months "
+                "after, including markets whose own rise came later. Each comparison removes differences in size "
+                "between markets and changes common to all markets in a given month, and the size of each rise scales "
+                "the response, so every point is a percentage loss of members per 1% price rise. This is a stacked "
+                "difference-in-differences event study. Comparing each rise only with markets that have not yet "
+                "changed price avoids the bias a single regression across all markets can show when rises happen at "
+                "different times and the response builds up over months. The likely range allows for the same market "
+                "appearing in several comparisons (standard errors clustered by market). The estimate assumes no other "
+                "change hit the rising markets at the moment of their rise; promotions or new content timed to a "
+                "price rise would need to be added to the comparison.")
+
+
+# --------------------------------------------------------------------------------------
 # Tab 3: subscriptions and levies
 # --------------------------------------------------------------------------------------
 with tab_subs:
@@ -554,8 +648,13 @@ with tab_subs:
     s1, s2, s3 = st.columns(3)
     members = s1.number_input("Members (millions)", 0.1, 100.0, float(mem0["members_m"]), 0.5)
     price = s2.number_input("Average monthly revenue per member (£)", 1.0, 50.0, float(mem0["monthly_price"]), 0.5)
-    elast = s3.number_input("How strongly membership responds to price", 0.1, 5.0, float(mem0["elasticity"]), 0.1,
-                            help="Price elasticity. 1.2 means a 1% price rise loses 1.2% of members.")
+    est_ok = est is not None and est.long_run > 0
+    opts = ([f"Estimated from price rises ({est.long_run:.2f})"] if est_ok else []) + ["Enter a figure"]
+    el_mode = s3.radio("How strongly membership responds to price", opts,
+                       help="Price elasticity: 1.2 means a 1% price rise loses 1.2% of members. The estimate comes "
+                            "from the Response to price tab.")
+    elast = est.long_run if el_mode.startswith("Estimated") else s3.number_input(
+        "Members lost per 1% price rise", 0.1, 5.0, 1.2, 0.1)
     s4, s5, s6 = st.columns(3)
     levy_rate = s4.slider("Levy on subscription revenue", 0.0, 10.0, 100 * float(mem0["levy_rate"]), 0.5,
                           format="%.1f%%") / 100
@@ -577,7 +676,8 @@ with tab_subs:
     lo = levy_incidence(mem, levy_rate, pt_opt)
 
     with headline_subs:
-        in_short(f"A {100 * levy_rate:g}% levy on subscription revenue would raise about {gbp(lo['levy_raised_m'], 0)} a "
+        in_short(f"With a 1% price rise losing {elast:.2f}% of members, a {100 * levy_rate:g}% levy on subscription "
+                 f"revenue would raise about {gbp(lo['levy_raised_m'], 0)} a "
                  f"year. A service that sets its price to earn the most profit would pass on about {pt_opt:.0%} of "
                  f"it, so members would bear {gbp(lo['borne_by_members_m'], 0)} and the service "
                  f"{gbp(lo['borne_by_service_m'], 0)}. Members value the service at about "
@@ -616,9 +716,7 @@ with tab_subs:
     st.altair_chart((lines + rule + rule_lab).properties(height=300).configure_view(stroke=None), width="stretch")
     st.caption("A levy on revenue takes the same share of revenue at every price, so it gives a service with low "
                "running costs little reason to raise its price. Passing on more than that loses members who paid "
-               "more than they cost to serve. With membership data by market, the response to price would be "
-               "estimated from past price changes, comparing markets that changed price with similar markets that "
-               "did not.")
+               "more than they cost to serve. The response to price comes from the Response to price tab.")
 
 # --------------------------------------------------------------------------------------
 # Tab 4: how it works
@@ -640,7 +738,11 @@ including the 80% cap and the separate treatment of visual effects. Tax paid app
 wages, spending and profits supported. Because these figures count all the activity, whether the credit pays for
 itself depends on the share of activity it brought to the UK.
 
-**Members and levies.** Membership falls in a straight line as price rises, at the stated rate, which gives a
+**How members respond to price.** The response is estimated from markets that raised their price, compared month by
+month with markets that did not (a stacked difference-in-differences event study, with standard errors clustered by
+market). A simple before-and-after comparison would mistake growth common to all markets for a weak response to price.
+
+**Members and levies.** Membership falls in a straight line as price rises, at the estimated rate, which gives a
 cautious estimate of the value to members. Unless a figure is entered, the cost of serving one more member is set so
 that the current price is the one that earns the most profit.
 
@@ -656,9 +758,10 @@ checked against its statistics office's published figures, the same cost-report 
 results for every market where productions are made.
 
 **Research that would firm up the figures.** Four pieces of work would strengthen the evidence: estimates of how
-location decisions respond to the credit, which set the share of activity it brings to the UK; estimates of how
-membership responds to price, from past price changes compared across markets; regional input-output tables, for
-effects by nation and region; and measures of screen tourism and exports, which the model leaves out.
+location decisions respond to the credit, which set the share of activity it brings to the UK; a fuller model of how
+members respond to price, adding promotions, new releases and competitors' prices, and separating sign-ups from
+cancellations; regional input-output tables, for effects by nation and region; and measures of screen tourism and
+exports, which the model leaves out.
 """)
     if url:
         st.markdown(f"Full method, sources and code: [{url}]({url}). One-page technical and policy note: "

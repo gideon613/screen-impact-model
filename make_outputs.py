@@ -13,6 +13,7 @@ Writes to outputs/:
                                region (spending and direct figures; no regional multipliers)
     industry.csv               GVA and jobs by industry for the whole slate
     sensitivity.csv            gross receipts per £1 of relief under alternative settings
+    price_response.csv         members lost per 1% price rise by months since the rise (event study)
     levy_incidence.csv         consumer surplus and levy incidence for a subscription service
     validation.csv             the model's reproduction of ONS results and its accounting identities
     *.png                      charts used in the README
@@ -33,6 +34,7 @@ import pandas as pd
 
 import numpy as np
 
+from elasticity import estimate as estimate_elasticity
 from fiscal import break_even_additionality, load_config, net_fiscal_impact
 from io_footprint import FootprintModel, load_data
 from slate import default_settings, run_slate, summary_table
@@ -182,7 +184,11 @@ def main():
     sens.round(3).to_csv(OUT / "sensitivity.csv", index=False)
 
     # ---------------- welfare ----------------
+    est = estimate_elasticity()
+    est.path.round(4).to_csv(OUT / "price_response.csv", index=False)
     w = json.loads((ROOT / "examples" / "illustrative_membership.json").read_text(encoding="utf-8"))
+    if w["elasticity"] == "estimate":
+        w["elasticity"] = est.long_run
     mem = Membership(w["members_m"], w["monthly_price"], w["elasticity"], w["marginal_cost_share"])
     pt_opt = profit_max_pass_through(mem, w["levy_rate"])
     cases = sorted(set(w["pass_through_cases"]) | {round(pt_opt, 4)})
@@ -299,7 +305,28 @@ def main():
     title(fig, "Sensitivity of the gross Exchequer return to model settings")
     fig.tight_layout(); fig.savefig(OUT / "sensitivity_tornado.png"); plt.close(fig)
 
-    # 6. Levy incidence
+    # 6. Price response (event study)
+    pr = est.path
+    fig, ax = plt.subplots(figsize=(8.4, 3.2), dpi=200)
+    ax.fill_between(pr["months_since_rise"], pr["low"], pr["high"], color=C1, alpha=0.18, linewidth=0)
+    ax.plot(pr["months_since_rise"], pr["elasticity"], color=C1, linewidth=2, marker="o", markersize=4)
+    ax.axhline(0, color=INK, linewidth=1)
+    ax.axvline(-0.5, color=MUTED, linewidth=1, linestyle=(0, (2, 3)))
+    ax.text(-0.35, pr["high"].max() * 1.02, "price rise", fontsize=8.5, color=INK2, va="bottom")
+    ax.annotate(f"{est.long_run:.2f}% after a year\n(likely range {est.low:.2f} to {est.high:.2f})",
+                (10.5, est.long_run), xytext=(7.2, est.long_run * 0.55), fontsize=8.5, color=INK2,
+                arrowprops=dict(arrowstyle="-", color=MUTED, linewidth=0.8))
+    ax.set_xticks(range(-6, 13))
+    ax.set_xlabel("Months since the price rise")
+    ax.set_ylabel("Members lost per 1%\nprice rise, %", color=INK2)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    ax.spines["left"].set_color(AXIS); ax.spines["bottom"].set_color(AXIS)
+    ax.grid(axis="y", color=GRID, linewidth=0.6); ax.set_axisbelow(True)
+    title(fig, f"How members respond to a price rise: {est.n_rising} markets compared with {est.n_comparison} that did not change price")
+    fig.tight_layout(); fig.savefig(OUT / "price_response.png"); plt.close(fig)
+
+    # 7. Levy incidence
     lev_col = {"Borne by members": C1, "Borne by the service": C2}
     labs = [f"{pt:.0%} passed on" + ("\n(profit-maximising)" if opt else "")
             for pt, opt in zip(levy["pass_through"], levy["profit_maximising"])]
@@ -373,10 +400,18 @@ Exchequer £{-nf50:.1f}m net. Across the model settings tested, the gross return
 £{sens['low'].min():.2f} to £{sens['high'].max():.2f} per £1, and the widest range comes from
 {sens.iloc[0]['setting'].lower()}.
 
+## How members respond to price
+
+Comparing {est.n_rising} hypothetical markets that raised their price with {est.n_comparison} that did not, month by
+month, a 1% price rise loses about {est.long_run:.2f}% of members within a year (95% range {est.low:.2f}% to
+{est.high:.2f}%). A simple before-and-after comparison in the markets that raised prices suggests
+{est.before_after:.2f}%, because membership was growing in every market at the same time. The illustrative data were
+built with a true value of 1.2.
+
 ## Value to members and the incidence of a levy
 
-For a hypothetical service with {w['members_m']:.0f} million members paying £{w['monthly_price']:.2f} a month and a
-membership price elasticity of {w['elasticity']}, members receive about £{cs:,.0f}m a year of value above
+For a hypothetical service with {w['members_m']:.0f} million members paying £{w['monthly_price']:.2f} a month and the
+estimated price elasticity of {w['elasticity']:.2f}, members receive about £{cs:,.0f}m a year of value above
 what they pay (linear demand, the conservative case). A {w['levy_rate']:.0%} levy on subscription revenue
 would raise about £{lopt['levy_raised_m']:.0f}m a year. A service that sets its price to maximise profit, with a
 cost of serving each member consistent with that elasticity, would pass on about {lopt['pass_through']:.0%} of

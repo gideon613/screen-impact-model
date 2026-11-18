@@ -6,7 +6,7 @@ All production, payroll and membership figures in `examples/` are invented to de
 
 ## Try it
 
-The interactive explorer (`app.py`) runs the model in a browser. A reviewer can switch between the slate and a single production, edit a cost report, bring spending into the UK, change the model settings, move from gross tax receipts to the net fiscal effect of the credit and test a levy on subscriptions. Each view opens with a one-paragraph summary of its results in plain English. The hosted version is linked from this repository's About panel. To run it locally:
+The interactive explorer (`app.py`) runs the model in a browser. A reviewer can switch between the slate and a single production, edit a cost report, bring spending into the UK, change the model settings, move from gross tax receipts to the net fiscal effect of the credit, estimate how members respond to price from past price rises, and test a levy on subscriptions using that estimate. Each view opens with a one-paragraph summary of its results in plain English. The hosted version is linked from this repository's About panel. To run it locally:
 
 ```bash
 pip install -r requirements.txt
@@ -21,7 +21,7 @@ A one-page technical and policy note for non-specialist readers is in [`docs/tec
 pip install -r requirements.txt
 python make_outputs.py            # builds the output pack in outputs/ from the illustrative inputs
 python io_footprint.py validate   # reproduces the ONS published results
-python -m pytest -q               # 34 tests, including a headless run of the app
+python -m pytest -q               # 41 tests, including a headless run of the app
 ```
 
 ### Running from R
@@ -38,13 +38,14 @@ The inputs are records a commissioning business keeps for its own purposes. The 
 | Where each cost was incurred (UK nation or region, or outside the UK) | Spend leaving the UK; spending by nation and region; the 80% cap in the credit calculation |
 | Payroll for cast and crew | Direct GVA and wages from pay; direct jobs as reported (`examples/illustrative_payroll.csv`), which replace the modelled figure |
 | Format and certification status | Credit eligibility and rate |
-| Members, revenue per member and the response to past price changes | Value to members and the incidence of a levy (`welfare.py`) |
+| Monthly price and members by market (`examples/illustrative_price_panel.csv`) | How strongly membership responds to price, estimated from past price rises (`elasticity.py`) |
+| Members and revenue per member | Value to members and the incidence of a levy (`welfare.py`) |
 
 A slate of any size runs in one pass, and every production is treated by the same rules. Adding a production means adding its cost-report lines to the input file. Inputs are checked before the model runs: every problem in a file (an unknown cost category or location, a negative or missing amount, a production with two formats, payroll jobs reported outside the UK) is listed in one message so the file can be fixed in one pass.
 
 ## What comes out
 
-`python make_outputs.py` writes a plain-English summary (`outputs/impact_summary.md`), nine tables and six charts. The figures below come from the illustrative slate of four productions: a drama series, a feature film, an unscripted entertainment series and an animated series. Money figures are in the prices of the inputs, which are stated in 2023 prices.
+`python make_outputs.py` writes a plain-English summary (`outputs/impact_summary.md`), ten tables and seven charts. The figures below come from the illustrative slate of four productions: a drama series, a feature film, an unscripted entertainment series and an animated series. Money figures are in the prices of the inputs, which are stated in 2023 prices.
 
 **Economic contribution.** The four productions had budgets of £152.8m, of which £143.3m was spent in the UK. Including UK supply chains and the spending of the wages paid, that spend supported £156.3m of UK GVA and 2,199 full-time equivalent jobs. Of those jobs, 943 were on the productions themselves as reported in payroll; the model would have estimated 1,148 from pay at the film and TV industry average, because screen work pays above that average. The drama series and the feature film account for most of the total because they are the largest, but the split by effect is similar across all four: between 37% and 40% of the GVA is on the production, a similar share is in its suppliers and about a quarter is in the wider economy as wages are spent.
 
@@ -68,7 +69,11 @@ A slate of any size runs in one pass, and every production is treated by the sam
 
 **Where the money was spent.** 56% of UK spend in the slate took place outside London, mostly in the South East around the studio, with smaller shares in Scotland, Wales, the North West and Northern Ireland (`outputs/region.csv`). The table reports UK spend, own cast and crew pay and reported jobs by where they occurred. The ONS publishes UK tables only, so the model does not estimate supply-chain or household-spending effects for individual nations and regions.
 
-**Value to members and a levy on subscriptions.** For a hypothetical service with 10 million members paying £10 a month and a membership price elasticity of 1.2, members receive about £500m a year of value above what they pay. A 5% levy on subscription revenue would raise about £60m a year. The cost of serving one more member is set so that the current price is the one that maximises profit, which with this elasticity puts it at 17% of the price. On that basis the service would pass on about 9% of the levy: its price rises by about 4p a month, around 53,000 members leave, members lose £5m of value and the service bears £60m. A levy on revenue takes the same share of revenue at every price, so it gives a service with low running costs little reason to raise its price. If the service passed the levy on in full, about 600,000 members would leave, members would lose £58m and the combined loss to members and the service would exceed the levy raised by £62m. The elasticity and the cost of serving each member decide the split, and both come from the service's own pricing data.
+**How members respond to price.** The levy results depend on how strongly membership responds to price, and a service that has raised prices in some markets and not others can measure it. The illustrative panel covers 30 hypothetical markets over four years, of which 22 raise their price once, at different times, and 8 never do. Comparing each price rise, month by month, with markets that had not changed price, a 1% price rise loses about 1.16% of members within a year, with a 95% range of 1.08% to 1.23%. Before the rises the two groups move together, which supports the comparison. A simple before-and-after comparison in the markets that raised prices suggests only 0.17%, because membership was growing in every market at the same time and the growth hides the members lost. The illustrative data were built with a true value of 1.2, which lies within the estimated range (`outputs/price_response.csv`).
+
+![Price response](outputs/price_response.png)
+
+**Value to members and a levy on subscriptions.** For a hypothetical service with 10 million members paying £10 a month and the estimated price elasticity of 1.16, members receive about £518m a year of value above what they pay. A 5% levy on subscription revenue would raise about £60m a year. The cost of serving one more member is set so that the current price is the one that maximises profit, which with this elasticity puts it at 14% of the price. On that basis the service would pass on about 7% of the levy: its price rises by about 4p a month, around 42,000 members leave, members lose £4m of value and the service bears £60m. A levy on revenue takes the same share of revenue at every price, so it gives a service with low running costs little reason to raise its price. If the service passed the levy on in full, about 579,000 members would leave, members would lose £58m and the combined loss to members and the service would exceed the levy raised by £62m. The elasticity and the cost of serving each member decide the split, and both come from the service's own pricing data.
 
 ![Levy incidence](outputs/levy_incidence.png)
 
@@ -84,7 +89,9 @@ A slate of any size runs in one pass, and every production is treated by the sam
 
 **Tax receipts.** Receipts use average effective rates applied to the income the activity supports: the tax wedge on wages for income tax and National Insurance; ONS product taxes per £ of household spending (10.4%) for VAT and duties on wages spent; ONS taxes on production by industry; and corporation tax at HMRC's 2023 to 2024 receipts as a share of UK operating surplus (10.1%). The ONS records net subsidies of £2.1bn for the film and TV industry in 2023, consistent with the screen credits, so industries where subsidies exceed taxes count as zero in the receipts to avoid counting the credit twice.
 
-**Members and levies.** Demand for membership is linear through the current price and membership at the stated elasticity. This is the conservative choice: a constant-elasticity curve gives a much larger value to members for the same elasticity. Unless it is entered directly, the cost of serving one more member comes from the pricing condition of a service that maximises profit, (P − MC)/P = 1/elasticity, so the price, elasticity and cost assumptions agree with each other. A levy is charged on subscription revenue. The model reports the share a profit-maximising service would pass on, c/(2(1 − levy)P) with linear demand, and for any chosen pass-through the levy raised, the cost to members, the cost to the service and the excess of the two over the levy.
+**How members respond to price.** `elasticity.py` estimates the price elasticity of membership with a stacked difference-in-differences event study (Cengiz, Dube, Lindner and Zipperer, 2019). Each month in which a price rise occurred forms its own comparison: the markets that raised prices that month against markets that did not change price over the 6 months before and 12 months after, including markets whose own rise came later. Each comparison has its own market and month effects, and treatment is the change in log price, so each coefficient is an elasticity at a given number of months after the rise. Comparing each rise only with markets that have not yet changed price avoids the bias a single two-way fixed effects regression shows when rises are staggered and the response builds up over time (Goodman-Bacon, 2021). Standard errors are clustered by market, because a comparison market appears in several comparisons. The long-run elasticity is the average response 9 to 12 months after the rise. A before-and-after estimate is reported alongside to show what the comparison group corrects for.
+
+**Members and levies.** Demand for membership is linear through the current price and membership at the estimated elasticity. This is the conservative choice: a constant-elasticity curve gives a much larger value to members for the same elasticity. Unless it is entered directly, the cost of serving one more member comes from the pricing condition of a service that maximises profit, (P − MC)/P = 1/elasticity, so the price, elasticity and cost assumptions agree with each other. A levy is charged on subscription revenue. The model reports the share a profit-maximising service would pass on, c/(2(1 − levy)P) with linear demand, and for any chosen pass-through the levy raised, the cost to members, the cost to the service and the excess of the two over the levy.
 
 **Two modes.** Mode 1 treats spending as demand for an industry's output with that industry's average supply chain; with a single industry it reproduces the ONS published effects exactly. Because the supply chain is already implied, mode 1 rejects reported purchases, which would count it twice. Mode 2, used for productions, drives the supply chain from what was actually bought.
 
@@ -95,11 +102,12 @@ Induced output = L2[n,n]·p + L2[n,h]·W − L1·p    c = κ·s,  κ = (1 − ta
 Bridge: b(i) = E(i)·(1 − m − t)·(1 − μ(i)) + margins re-routed to wholesale;  t = film and TV product-tax rate
 Credit: 34%·min(UK core, 80%·total core) + 39%·VFX − 34%·max(0, VFX − cap reduction)
 Net fiscal impact = gross receipts · additionality · (1 − displacement) − net cost of the credit
+Event study: ln N(m,t,s) = α(m,s) + λ(t,s) + Σ_k β_k · Δln p(m) · 1[t − c(s) = k] + u;  elasticity at k = −β_k
 ```
 
 ## Validation
 
-`python io_footprint.py validate` runs the checks below; all pass. The 34 automated tests repeat the ONS reproduction for five industries and check the credit against HMRC's worked method, the price bridge and spend bridge, the input checks, reported jobs, the net fiscal calculation, the levy incidence and its profit-maximising pass-through, and a headless run of the app. GitHub Actions runs the validation and the tests on every change (`.github/workflows/tests.yml`).
+`python io_footprint.py validate` runs the checks below; all pass. The 41 automated tests repeat the ONS reproduction for five industries and check the credit against HMRC's worked method, the price bridge and spend bridge, the input checks, reported jobs, the net fiscal calculation, the levy incidence and its profit-maximising pass-through, the price-response estimate (which recovers the true elasticity in simulated data, shows no response before a rise and finds none when there is none), and a headless run of the app. GitHub Actions runs the validation and the tests on every change (`.github/workflows/tests.yml`).
 
 | Check | Result |
 |---|---|
@@ -126,6 +134,7 @@ Everything specific to the UK sits in three places: the ONS tables in `data/`, t
 - The ONS tables cover the UK as a whole. Results by nation and region are limited to spending, pay and reported jobs.
 - Reported direct jobs are attached to the industries where pay is recorded. Spillovers such as screen tourism, skills and exports are outside the model.
 - The levy calculation assumes linear demand, a constant cost of serving one more member and a single service; it does not model changes to the content budget or responses by competing services.
+- The price-response estimate assumes nothing else changed in a market at the moment of its price rise. Promotions, major releases or competitors' price changes timed to a rise would need to be added to the comparison.
 - Coefficients describe 2023. For spend from later years, set `Settings.price_index` so the jobs figures are on 2023 prices.
 
 ## Sources
