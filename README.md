@@ -6,7 +6,7 @@ All production, payroll and membership figures in `examples/` are invented to de
 
 ## Try it
 
-The interactive explorer (`app.py`) runs the model in a browser. A reviewer can switch between the slate and a single production, edit a cost report, bring spending into the UK, change the model settings, move from gross tax receipts to the net fiscal effect of the credit, test a levy on subscriptions and rerun the validation and test suite. The hosted version is linked from this repository's About panel. To run it locally:
+The interactive explorer (`app.py`) runs the model in a browser. A reviewer can switch between the slate and a single production, edit a cost report, bring spending into the UK, change the model settings, move from gross tax receipts to the net fiscal effect of the credit and test a levy on subscriptions. Each view opens with a one-paragraph summary of its results in plain English. The hosted version is linked from this repository's About panel. To run it locally:
 
 ```bash
 pip install -r requirements.txt
@@ -99,7 +99,7 @@ Net fiscal impact = gross receipts · additionality · (1 − displacement) − 
 
 ## Validation
 
-`python io_footprint.py validate` runs the checks below; all pass, and the explorer's Model validation tab shows them live alongside a comparison with ONS for any industry. The 34 automated tests repeat the ONS reproduction for five industries and check the credit against HMRC's worked method, the price bridge and spend bridge, the input checks, reported jobs, the net fiscal calculation, the levy incidence and its profit-maximising pass-through, and a headless run of the app. GitHub Actions runs the validation and the tests on every change (`.github/workflows/tests.yml`).
+`python io_footprint.py validate` runs the checks below; all pass. The 34 automated tests repeat the ONS reproduction for five industries and check the credit against HMRC's worked method, the price bridge and spend bridge, the input checks, reported jobs, the net fiscal calculation, the levy incidence and its profit-maximising pass-through, and a headless run of the app. GitHub Actions runs the validation and the tests on every change (`.github/workflows/tests.yml`).
 
 | Check | Result |
 |---|---|
