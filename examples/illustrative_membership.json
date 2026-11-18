@@ -1,8 +1,8 @@
 {
-  "_note": "Illustrative only. A hypothetical subscription service. A streaming service holds these figures internally: members and revenue from its own accounts, and the elasticity from the response of sign-ups and cancellations to past price changes. marginal_cost_share null sets marginal cost from the pricing condition (1 - 1/elasticity).",
+  "_note": "Illustrative only. A hypothetical subscription service. A streaming service holds these figures internally: members and revenue from its own accounts. elasticity \"estimate\" takes the long-run price elasticity estimated from past price rises in examples/illustrative_price_panel.csv (elasticity.py); a number overrides it. marginal_cost_share null sets marginal cost from the pricing condition (1 - 1/elasticity).",
   "members_m": 10.0,
   "monthly_price": 10.0,
-  "elasticity": 1.2,
+  "elasticity": "estimate",
   "marginal_cost_share": null,
   "levy_rate": 0.05,
   "pass_through_cases": [

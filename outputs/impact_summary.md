@@ -41,18 +41,26 @@ Exchequer £7.5m net. Across the model settings tested, the gross return ranges 
 £1.16 to £1.63 per £1, and the widest range comes from
 induced effects.
 
+## How members respond to price
+
+Comparing 22 hypothetical markets that raised their price with 8 that did not, month by
+month, a 1% price rise loses about 1.16% of members within a year (95% range 1.08% to
+1.23%). A simple before-and-after comparison in the markets that raised prices suggests
+0.17%, because membership was growing in every market at the same time. The illustrative data were
+built with a true value of 1.2.
+
 ## Value to members and the incidence of a levy
 
-For a hypothetical service with 10 million members paying £10.00 a month and a
-membership price elasticity of 1.2, members receive about £500m a year of value above
+For a hypothetical service with 10 million members paying £10.00 a month and the
+estimated price elasticity of 1.16, members receive about £518m a year of value above
 what they pay (linear demand, the conservative case). A 5% levy on subscription revenue
 would raise about £60m a year. A service that sets its price to maximise profit, with a
-cost of serving each member consistent with that elasticity, would pass on about 9% of
+cost of serving each member consistent with that elasticity, would pass on about 7% of
 the levy. Its price would rise by about 4p a month, around
-53 thousand members would leave, members would lose £5m of value
+42 thousand members would leave, members would lose £4m of value
 and the service would bear £60m. A levy on revenue takes the same share of revenue
 at every price, so it gives a service with low running costs little reason to raise its price. If
-the service passed the levy on in full, about 600 thousand members would leave and
+the service passed the levy on in full, about 579 thousand members would leave and
 the combined loss to members and the service would exceed the levy raised by
 £62m.
 
