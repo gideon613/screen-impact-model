@@ -240,9 +240,9 @@ st.markdown(
     "Governments are intetested in answering three related economic questions: what does media production spending "
     "add to the economy, what do the public finances get back for the tax credit provided, and who would "
     "bear any tax or levy applied to subscriptions. This model uses data a typical business would keep internally: "
-    "production cost reports, payroll and membership data. The outputs are calculated from the inputs shown on screen. "
+    "production cost reports, payroll and membership data. The outputs are calculated from the inputs shown on screen. ")
     
-    "**All production and membership figures are illustrative and do not describe any real production, studio "
+   st.markdown("**All production and membership figures are illustrative and do not describe any real production, studio "
     "or service.**")
 st.caption("Built by Gideon Morrison-Wood based on ONS input-output tables for 2023."
            + (f" [Source code and method]({url})" if url else ""))
