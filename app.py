@@ -237,13 +237,13 @@ settings = default_settings(cfg, tax_wedge=tax_wedge, saving_ratio=saving, inclu
 st.title("Screen production economic impact explorer")
 url = repo_url()
 st.markdown(
-    "Governments and regulators ask businesses that commission films and series three questions: what their "
-    "production spending adds to the economy, what the public finances get back for the tax credit, and who would "
-    "bear a levy on subscriptions. This explorer answers them from records such a business already keeps: "
-    "production cost reports, payroll and membership data. Every figure is calculated from the inputs on screen. "
-    "**All production and membership figures are illustrative** and do not describe any real production, studio "
-    "or service.")
-st.caption("Built by Gideon Morrison-Wood on the ONS input-output tables for 2023."
+    "Governments are intetested in answering three related economic questions: what does media production spending "
+    "add to the economy, what do the public finances get back for the tax credit they provide, and who would "
+    "bear any tax or levy applied to subscriptions. This model uses data a typical business would keep internally: "
+    "production cost reports, payroll and membership data. The outputs are calculated from the inputs shown on screen. "
+    "**All production and membership figures are illustrative and do not describe any real production, studio "
+    "or service.**")
+st.caption("Built by Gideon Morrison-Wood based on ONS input-output tables for 2023."
            + (f" [Source code and method]({url})" if url else ""))
 
 tab_econ, tab_fiscal, tab_price, tab_subs, tab_method = st.tabs(
