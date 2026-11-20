@@ -241,6 +241,7 @@ st.markdown(
     "add to the economy, what do the public finances get back for the tax credit provided, and who would "
     "bear any tax or levy applied to subscriptions. This model uses data a typical business would keep internally: "
     "production cost reports, payroll and membership data. The outputs are calculated from the inputs shown on screen. "
+    
     "**All production and membership figures are illustrative and do not describe any real production, studio "
     "or service.**")
 st.caption("Built by Gideon Morrison-Wood based on ONS input-output tables for 2023."
